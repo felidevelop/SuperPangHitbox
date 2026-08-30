@@ -30,10 +30,10 @@ Buscando 128 elementos, aunque esto solo es una aproximacion.
 
 ##Estructuras de los objetos
 La clasificacion de los objetos se disfrubuye asi:
-|Offset|Descripcion|
-|+0x00|1=activo/0=inactivo|
-|+0x09/0x0A/0x0B|posicion x|
-|+0x0D|posicion y|
+| Offset | Descripcion | Largo | Contenido |
+| +0x00 | 1=activo/0=inactivo |
+| +0x09/0x0A/0x0B | Posicion x |
+| +0x0D | Posicion y |
 
 
 
