@@ -44,7 +44,7 @@ Primero hay que mencionar que todos los detalles del funcionamiento de las rutin
 
 Cada interaccion parece tener su propio apartado para elegir como interacturar entre si, es decir la colision entre Globo y Arpon, Globo y Jugador, Jugador e item, son independientes a excepcion de algunos casos que comparten el mismo procedimiento.
 
-Por ejemplo interaccion entre globo y arpon:
+###Por ejemplo interaccion entre globo y arpon:
 El objeto atacado proporciona su perfil geométrico.
 El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
 Este comportamiento tambien aplica para los globos hexagonales.
@@ -304,4 +304,126 @@ PERFIL 5 — RUTINA 8A3E
 
 8A56  JP $8FE9
 ```
+
+El arpon se identifico como E380 dentro de la memoria RAM y siempre tiene este valor de puntero en cualquier nivel, lo que sugiere que los elementos pueden entar organizados en bloques especificos de la tabla de objetos.
+
++0D = Posicion Y actual del arpón
++0E = Origen vertical del arpón
++1B = X del arpón
+
+Las rutinas demostraban que los elementos solo se comparaban con la posicion X del arpon, algo que indica que el arpon solo tiene 1px de ancho en su colision, valor que fue comprobado al disparar el arpon muy cerca de paredes y comprobar que solo cuando la fina linea toca algo hay interaccion.
+
+El valor +0xE aparece cuando el arpon recien es creado al disparar, y nace con la posicion Y con la que fue creado y no cambia durante el trayecto, es decir una referencia Y de su creacion. Este valor es el usado para lo colision vertical del arpon. Tiene todo el sentido porque el arpon ataca incluso a globos desde su base.
+
+###Interaccion globo con jugador
+Para la interaccion entre globo y jugador es diferente en cuanto a globo y arpon. La rutina responsable de esto se encuentra en BBE6.
+
+```
+BBE6  CP $01
+BBE8  JP Z,$BC72
+
+BBEB  CP $02
+BBED  JP Z,$BC54
+
+BBF0  CP $03
+BBF2  JP Z,$BC36
+
+BBF5  CP $04
+BBF7  JP Z,$BC18
+```
+
+Después de CP $04, el código continúa directamente al perfil 5 en BBFA
+
+Esto indica que para colisionar con el jugador el globo no usa la misma hitbox que usa para rebotar o chocar con las paredes.
+
+CASO 1 — BC72
+```
+BC72  LD BC,$0008
+BC75  ADD HL,BC
+BC76  SBC HL,DE
+BC78  LD BC,$FFEF
+BC7B  ADD HL,BC
+BC7C  RET C
+
+BC7D  EXX
+BC7E  LD A,(IY+$0D)
+BC81  ADD A,$0C
+BC83  SUB E
+BC84  CP $1C
+BC86  JP NC,$BC90
+```
+
+CASO 2 — BC54
+```
+BC54  LD BC,$000A
+BC57  ADD HL,BC
+BC58  SBC HL,DE
+BC5A  LD BC,$FFEB
+BC5D  ADD HL,BC
+BC5E  RET C
+
+BC5F  EXX
+BC60  LD A,(IY+$0D)
+BC63  ADD A,$0E
+BC65  SUB E
+BC66  CP $20
+BC68  JP NC,$BC90
+```
+
+CASO 3 — BC36
+```
+BC36  LD BC,$000F
+BC39  ADD HL,BC
+BC3A  SBC HL,DE
+BC3C  LD BC,$FFE1
+BC3F  ADD HL,BC
+BC40  RET C
+
+BC41  EXX
+BC42  LD A,(IY+$0D)
+BC45  ADD A,$12
+BC47  SUB E
+BC48  CP $28
+BC4A  JP NC,$BC90
+```
+
+CASO 4 — BC18
+```
+BC18  LD BC,$0016
+BC1B  ADD HL,BC
+BC1C  SBC HL,BC
+BC1E  LD BC,$FFD3
+BC21  ADD HL,BC
+BC22  RET C
+
+BC23  EXX
+BC24  LD A,(IY+$0D)
+BC27  ADD A,$1A
+BC29  SUB E
+BC2A  CP $38
+BC2C  JP NC,$BC90
+```
+
+CASO 5 — BBFA
+```
+BBFA  LD BC,$001C
+BBFD  ADD HL,BC
+BBFE  SBC HL,DE
+BC00  LD BC,$FFC7
+BC03  ADD HL,BC
+BC04  RET C
+
+BC05  EXX
+BC06  LD A,(IY+$0D)
+BC09  ADD A,$1E
+BC0B  SUB E
+BC0C  CP $40
+BC0E  JP NC,$BC90
+```
+
+Para la colision con el jugador se observo que la hitbox del globo no se compara con una hitbox del jugador, mas bien solo se usa la posicion X e Y del jugador para la comparacion. Es decir, la hitbox del globo tiene que alcanzar el punto central del jugador para que se accione una colision.
+
+
+[continuar con el funcionamiento de las tiles y la colision del mapa]
+
 
