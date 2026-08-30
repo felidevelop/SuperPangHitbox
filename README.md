@@ -47,6 +47,7 @@ Cada interaccion parece tener su propio apartado para elegir como interacturar e
 Por ejemplo interaccion entre globo y arpon:
 El objeto atacado proporciona su perfil geométrico.
 El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
+Este comportamiento tambien aplica para los globos hexagonales.
 
 Segun el perfil del globo o 0x1C
 Rutinas:
@@ -161,4 +162,146 @@ Base: 0x90B7
 | 32 | 04 | 08 |
 
 Estos valores fueron extraidos mientras el debug del emulador MAME entraba en las rutinas de los perfiles. Porque si uno rastrea esas direcciones en la RAM values de FBA-RR no encontrara esos valores. Eso es porque los valores unicamente existen cuando la ejecucion entra a esas rutinas. Es decir hay valores RAM que solo existen por un momento antes de desaparecer, y el avance de frame a frame es muy rapido para detectarlos.
+
+
+La rutina encontrada en 0x8A2A utiliza el valor de +0x1C para seleccionar que rutina determina los limites de colision.
+
+```
+8A2A  CP $01
+8A2C  JP Z,$8AAD
+
+8A2F  CP $02
+8A31  JP Z,$8A98
+
+8A34  CP $03
+8A36  JP Z,$8A7A
+
+8A39  CP $04
+8A3B  JP Z,$8A5C
+```
+
+El código continúa directamente en 8A3E para el siguiente perfil:
++1C = 5 -> rutina en 8A3E
+
+PERFIL 1 — RUTINA 8AAD
+```
+8AAD  LD A,C
+8AAE  ADD A,$02
+8AB0  SUB B
+8AB1  CP $05
+8AB3  RET NC
+
+8AB4  LD A,(IY+$0D)
+8AB7  ADD A,$03
+8AB9  CP E
+8ABA  RET C
+
+8ABB  SUB $07
+8ABD  CP D
+8ABE  RET NC
+
+8ABF  JP $8FE9
+```
+
+PERFIL 2 — RUTINA 8A98
+```
+8A98  LD A,C
+8A99  ADD A,$04
+8A9B  SUB B
+8A9C  CP $09
+8A9E  RET NC
+
+8A9F  LD A,(IY+$0D)
+8AA2  ADD A,$07
+8AA4  CP E
+8AA5  RET C
+
+8AA6  SUB $0F
+8AA8  CP D
+8AAA  RET NC
+
+8AAB  JP $8FE9
+```
+
+PERFIL 3 — RUTINA 8A7A
+```
+8A7A  LD A,C
+8A7B  ADD A,$08
+8A7D  SUB B
+8A7E  CP $11
+8A80  RET NC
+
+8A81  ADD A,A
+8A82  LD HL,$912F
+8A85  ADD A,L
+8A86  LD L,A
+8A87  JP NC,$8A8B
+8A89  INC H
+
+8A8B  LD A,(IY+$0D)
+8A8E  ADD A,(HL)
+8A8F  CP E
+8A90  RET C
+
+8A91  INC HL
+8A92  SUB (HL)
+8A93  CP D
+8A94  RET NC
+
+8A95  JP $8FE9
+```
+
+PERFIL 4 — RUTINA 8A5C
+```
+8A5C  LD A,C
+8A5D  ADD A,$0C
+8A60  SUB B
+8A61  CP $19
+8A63  RET NC
+
+8A64  ADD A,A
+8A65  LD HL,$90FB
+8A68  ADD A,L
+8A69  LD L,A
+8A6A  JP NC,$8A6D
+8A6C  INC H
+
+8A6D  LD A,(IY+$0D)
+8A70  ADD A,(HL)
+8A71  CP E
+8A72  RET C
+
+8A73  INC HL
+8A74  SUB (HL)
+8A75  CP D
+8A76  RET NC
+
+8A77  JP $8FE9
+```
+
+PERFIL 5 — RUTINA 8A3E
+```
+8A3E  LD A,C
+8A3F  ADD A,$10
+8A41  SUB B
+8A42  CP $21
+8A44  RET NC
+
+8A45  ADD A,A
+8A46  LD HL,$90B7
+8A49  ADD A,L
+8A4A  LD L,A
+
+8A4B  LD A,(IY+$0D)
+8A4E  ADD A,(HL)
+8A4F  CP E
+8A51  RET C
+
+8A52  INC HL
+8A53  SUB (HL)
+8A54  CP D
+8A55  RET NC
+
+8A56  JP $8FE9
+```
 
