@@ -3,7 +3,7 @@ Proyecto enfocado en la busqueda del sistema de colisiones del juego Super Pang 
 
 Este proyecto se ha desarollado bajo el proposito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchel Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colision de los diferentes elementos del juego. A continuacion se dara un detalle tecnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso qu aun esta puliendo detalles.
 
-<img height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
+<img width="768" height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
 
 Para explorar el funcionamiento del juego se ha usado las herramientas MAME para la depuracion y examinar el codigo fuente, tambien se uso el emulador FBA-RR v0.0.5 para la busqueda de las RAM Values del juego y el uso de script lua para una mejor exploracion y comprobacion de los valores encontrados.
 
