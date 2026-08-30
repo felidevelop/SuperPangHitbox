@@ -33,9 +33,132 @@ La clasificacion de los objetos se disfrubuye asi:
 | Offset | Descripcion |
 | :--- | :--- |
 | +0x00 | 1=activo/0=inactivo |
-| +0x09/0x0A/0x0B | Posicion x |
-| +0x0D | Posicion y |
+| +0x09/0x0A/0x0B | Posicion X |
+| +0x0D | Posicion Y |
+| +0x16 | Numero usado para diferenciar el tamaño del globo 1/2/4/8/16 |
+| +0x1B | Posicion X utilizada por las rutinas de colisión |
+| +0x1C | Selector de perfil utilizado por el dispatcher de las rutinas 8Axx |
 
+##Funcionamiento de rutinas/funciones
+Primero hay que mencionar que todos los detalles del funcionamiento de las rutinas que determinan la colision fueron rastreadas usando el debug del codigo fuente del juego con MAME. Durante el rastreo se pudo concluir una serie de cosas.
 
+Cada interaccion parece tener su propio apartado para elegir como interacturar entre si, es decir la colision entre Globo y Arpon, Globo y Jugador, Jugador e item, son independientes a excepcion de algunos casos que comparten el mismo procedimiento.
 
+Por ejemplo interaccion entre globo y arpon:
+El objeto atacado proporciona su perfil geométrico.
+El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
+
+Segun el perfil del globo o 0x1C
+Rutinas:
+8AAD -> perfil 1
+8A98 -> perfil 2
+8A7A -> perfil 3
+8A5C -> perfil 4
+8A3E -> perfil 5
+
+Para los casos 3/4/5 la colision usa una tabla que se encuentra en la RAM para crear una colision mas compleja orientada a formar un circulo.
+RAM 912F → perfil 3 / 17 columnas
+RAM 90FB → perfil 4 / 25 columnas
+RAM 90B7 → perfil 5 / 33 columnas
+
+Cada entrada de esas tablas tiene dos valores verticales que, combinados con cada desplazamiento X, reconstruyen la forma de la hitbox del globo.
+
+Una conclusion importante aqui es que no son los valores RAM las que controlan los limites de colision, es el propio codigo fuente del juego, es decir que las hitbox no pueden ser controladas durante el juego. Y esto ocurre para todas las interacciones.
+
+Durante el rastreo de los valores de los perfiles 3/4/5 se encontraron estos valores:
+
+Perfil 3
+Base: 0x912F
+17 entradas / 34 bytes
+| dx | v1 | v2 |
+| :- | :- | :- |
+| 0  | 02 | 04 |
+| 1  | 02 | 04 |
+| 2  | 07 | 0E |
+| 3  | 09 | 12 |
+| 4  | 0B | 16 |
+| 5  | 0C | 18 |
+| 6  | 0D | 1A |
+| 7  | 0E | 1C |
+| 8  | 0E | 1C |
+| 9  | 0E | 1C |
+| 10 | 0E | 1C |
+| 11 | 0E | 1C |
+| 12 | 0D | 1A |
+| 13 | 0C | 18 |
+| 14 | 09 | 12 |
+| 15 | 07 | 0E |
+| 16 | 02 | 04 |
+
+Perfil 4
+Base: 0x90FB
+25 entradas / 50 bytes
+| dx | v1 | v2 |
+| :- | :- | :- |
+| 0  | 04 | 08 |
+| 1  | 04 | 08 |
+| 2  | 09 | 12 |
+| 3  | 0C | 18 |
+| 4  | 0E | 1C |
+| 5  | 10 | 20 |
+| 6  | 11 | 22 |
+| 7  | 13 | 26 |
+| 8  | 13 | 26 |
+| 9  | 14 | 28 |
+| 10 | 16 | 2C |
+| 11 | 16 | 2C |
+| 12 | 16 | 2C |
+| 13 | 16 | 2C |
+| 14 | 16 | 2C |
+| 15 | 16 | 2C |
+| 16 | 16 | 2C |
+| 17 | 16 | 2C |
+| 18 | 14 | 28 |
+| 19 | 13 | 26 |
+| 20 | 13 | 26 |
+| 21 | 11 | 22 |
+| 22 | 10 | 20 |
+| 23 | 0E | 1C |
+| 24 | 0C | 18 |
+
+Perfil 5
+Base: 0x90B7
+33 entradas / 66 bytes
+| dx | v1 | v2 |
+| :- | :- | :- |
+| 0  | 04 | 08 |
+| 1  | 04 | 08 |
+| 2  | 0A | 14 |
+| 3  | 0D | 1A |
+| 4  | 10 | 20 |
+| 5  | 12 | 24 |
+| 6  | 14 | 28 |
+| 7  | 15 | 2A |
+| 8  | 16 | 2C |
+| 9  | 18 | 30 |
+| 10 | 19 | 32 |
+| 11 | 1A | 34 |
+| 12 | 1B | 36 |
+| 13 | 1B | 36 |
+| 14 | 1C | 38 |
+| 15 | 1C | 38 |
+| 16 | 1C | 38 |
+| 17 | 1C | 38 |
+| 18 | 1C | 38 |
+| 19 | 1C | 38 |
+| 20 | 1B | 36 |
+| 21 | 1B | 36 |
+| 22 | 1A | 34 |
+| 23 | 19 | 32 |
+| 24 | 18 | 30 |
+| 25 | 16 | 2C |
+| 26 | 15 | 2A |
+| 27 | 14 | 28 |
+| 28 | 12 | 24 |
+| 29 | 10 | 20 |
+| 30 | 0D | 1A |
+| 31 | 0A | 14 |
+| 32 | 04 | 08 |
+
+Estos valores fueron extraidos mientras el debug del emulador MAME entraba en las rutinas de los perfiles. Porque si uno rastrea esas direcciones en la RAM values de FBA-RR no encontrara esos valores. Eso es porque los valores unicamente existen cuando la ejecucion entra a esas rutinas. Es decir hay valores RAM que solo existen por un momento antes de desaparecer, y el avance de frame a frame es muy rapido para detectarlos.
 
