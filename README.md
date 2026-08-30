@@ -11,4 +11,33 @@ Para el uso de mame se ejecuta en cmd:
 mame spang -window -debug
 ```
 
-Para ejecutar la rom de mame en modo ventana y con la depuracion activa. Es necesario contar con la ROM y el archivo de sonidos de la placa del juego ym2413.
+Para ejecutar la rom en mame en modo ventana y con la depuracion activa. Es necesario contar con la ROM y el archivo de sonidos de la placa del juego ym2413.
+
+Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de observacion (watpoint) para detener la ejecucion en un punto especifico del codigo o cuando un valor de la RAM esta siendo consultada o modificado.
+
+Para la ejecucion en FBA-RR solo es necesario abrir el ejecutable .exe abrir la rom y abrir las opciones para la ejecucion del .lua desarollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma mas facil que buscarlo en la depuracion de mame.
+
+
+# Valores
+Para la busqueda de valores, fue de gran ayuda el uso de IA adjuntando archivos, dump de la RAM y fotos que mostraban detalles exactos para el trabajo de analisis y busqueda de los posibles valores.
+
+En esta busqueda se encontro que la tabla puntero de los objetos comenzaba en la direccion E080 de la RAM, y cada bloque de objeto se organizaba cada 0x20 (32 en base10). Aunque busquedas posteriores sugieren que no todos los objetos tienen el mismo tamaño, algunos posiblemente 0x10 (16 en base10). Principalmente los objetos se recorrer con la formula.
+
+```
+objeto[i] = 0xE080 + i * 0x20
+```
+Buscando 128 elementos, aunque esto solo es una aproximacion.
+
+##Estructuras de los objetos
+La clasificacion de los objetos se disfrubuye asi:
+|Offset|Descripcion|
+|+0x00|1=activo/0=inactivo|
+|+0x09/0x0A/0x0B|posicion x|
+|+0x0D|posicion y|
+
+
+
+
+
+
+
