@@ -5,6 +5,8 @@ Este proyecto se ha desarollado bajo el proposito de explorar el funcionamiento 
 
 Para explorar el funcionamiento del juego se ha usado las herramientas MAME para la depuracion y examinar el codigo fuente, tambien se uso el emulador FBA-RR v0.0.5 para la busqueda de las RAM Values del juego y el uso de script lua para una mejor exploracion y comprobacion de los valores encontrados.
 
+*El codigo fuente lua actual es posible cargarlo y usarlo y disfrutarlo. Pero debe recordar que aun esta imcompleto.*
+
 Para el uso de mame se ejecuta en cmd:
 
 ```
