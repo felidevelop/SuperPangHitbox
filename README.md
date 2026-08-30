@@ -30,17 +30,11 @@ Buscando 128 elementos, aunque esto solo es una aproximacion.
 
 ##Estructuras de los objetos
 La clasificacion de los objetos se disfrubuye asi:
-| Offset | Descripcion | Largo | Contenido |
+| Offset | Descripcion |
+| :--- | :--- |
 | +0x00 | 1=activo/0=inactivo |
 | +0x09/0x0A/0x0B | Posicion x |
 | +0x0D | Posicion y |
-
-
-| Variable | Posicion | Largo | Contenido |
-| :--- | :--- | :--- | :--- |
-| Largo JSON | 0 | 4 bytes | Numero en formato Big endian del largo del JSON |
-| JSON | 4 | Largo indicado por "Largo JSON" | Contenido del JSON |
-| Archivo Binario | 4 + Largo JSON | - | Comienza el contenido binario del primer archivo |
 
 
 
