@@ -36,7 +36,11 @@ La clasificacion de los objetos se disfrubuye asi:
 | +0x0D | Posicion y |
 
 
-
+| Variable | Posicion | Largo | Contenido |
+| :--- | :--- | :--- | :--- |
+| Largo JSON | 0 | 4 bytes | Numero en formato Big endian del largo del JSON |
+| JSON | 4 | Largo indicado por "Largo JSON" | Contenido del JSON |
+| Archivo Binario | 4 + Largo JSON | - | Comienza el contenido binario del primer archivo |
 
 
 
