@@ -64,6 +64,13 @@ Rutinas:
 8A5C -> perfil 4
 8A3E -> perfil 5
 
+<img width="123" height="141" alt="globo1" src="https://github.com/user-attachments/assets/4e7e75de-2ec3-48b0-977d-77065758a32f" />
+<img width="141" height="144" alt="globo2" src="https://github.com/user-attachments/assets/ccdc53d9-07b9-4637-835d-2b25b8f9517d" />
+<img width="162" height="174" alt="globo3" src="https://github.com/user-attachments/assets/efa9f64f-b602-43e0-b0e8-a8666a529f24" />
+<img width="142" height="148" alt="globo4" src="https://github.com/user-attachments/assets/26963955-c6a6-443e-84f1-0333b71a5703" />
+<img width="244" height="220" alt="globo5" src="https://github.com/user-attachments/assets/5ad50a73-e62f-46d6-a1aa-ab15d3f9904c" />
+
+
 Para los casos 3/4/5 la colisión usa una tabla que se encuentra en la RAM para crear una colisión mas compleja orientada a formar un circulo.
 RAM 912F → perfil 3 / 17 columnas
 RAM 90FB → perfil 4 / 25 columnas
@@ -431,8 +438,14 @@ Para la colisión con el jugador se observo que la hitbox del globo no se compar
 
 *La hitbox del globo de perfil 1 tiene las mismas dimensiones que usa el hitbox del jugador para interactuar con el terreno*
 
+<img width="147" height="198" alt="jugador" src="https://github.com/user-attachments/assets/61ae5402-3c9f-4ece-b97c-7aed806e6a22" />
+
+
 ## Interacción escalera con jugador
 Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, una escalera siempre tiene su posición X e Y fijas, son elementos que no cambian de posición pero su altura si es variable entre niveles.
+
+<img width="194" height="170" alt="escaleras" src="https://github.com/user-attachments/assets/821ecf1a-1bd6-4181-81f5-adc4092fe972" />
+
 
 +0x0A/+0x0B = X de la escalera
 +0x0C = límite vertical de la escalera
@@ -470,6 +483,10 @@ Este es el rango que se compara con X/Y del jugador para definir si el jugador e
 ## Interacción item con el entorno
 Los items se manejan desde otra tabla que apunta a F900.
 La interacción ocurre en la rutina B870
+
+<img width="142" height="174" alt="item2" src="https://github.com/user-attachments/assets/84fe5569-7c5f-4066-b581-178a8d93545e" />
+<img width="218" height="144" alt="item1" src="https://github.com/user-attachments/assets/3554abc3-b088-4095-8f37-aafea1c1e03f" />
+
 
 ```
 B887  LD A,(IX+$0D)
