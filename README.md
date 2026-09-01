@@ -320,6 +320,9 @@ PERFIL 5 — RUTINA 8A3E
 
 El arpón se identifico como E380 dentro de la memoria RAM y siempre tiene este valor de puntero en cualquier nivel, lo que sugiere que los elementos pueden entrar organizados en bloques específicos de la tabla de objetos.
 
+<img width="459" height="297" alt="arpon" src="https://github.com/user-attachments/assets/d49ef5bd-5542-475c-96f0-e4885818ca11" />
+
+
 +0D = Posición Y actual del arpón
 +0E = Origen vertical del arpón
 +1B = X del arpón
