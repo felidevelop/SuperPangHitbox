@@ -33,7 +33,7 @@ objeto[i] = 0xE080 + i * 0x20
 Buscando 128 elementos, aunque esto solo es una aproximacion.
 
 ##Estructuras de los objetos
-La clasificacion de los objetos se disfrubuye asi:
+La clasificacion de los objetos se distribuye asi:
 | Offset | Descripcion |
 | :--- | :--- |
 | +0x00 | 1=activo/0=inactivo |
@@ -319,7 +319,7 @@ Las rutinas demostraban que los elementos solo se comparaban con la posicion X d
 
 El valor +0xE aparece cuando el arpon recien es creado al disparar, y nace con la posicion Y con la que fue creado y no cambia durante el trayecto, es decir una referencia Y de su creacion. Este valor es el usado para lo colision vertical del arpon. Tiene todo el sentido porque el arpon ataca incluso a globos desde su base.
 
-###Interaccion globo con jugador
+##Interaccion globo con jugador
 Para la interaccion entre globo y jugador es diferente en cuanto a globo y arpon. La rutina responsable de esto se encuentra en BBE6.
 
 ```
@@ -427,7 +427,114 @@ BC0E  JP NC,$BC90
 
 Para la colision con el jugador se observo que la hitbox del globo no se compara con una hitbox del jugador, mas bien solo se usa la posicion X e Y del jugador para la comparacion. Es decir, la hitbox del globo tiene que alcanzar el punto central del jugador para que se accione una colision.
 
+##Interaccion escalera con jugador
+Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, una escalera siempre tiene su posicion X e Y fijas, son elementos que no cambian de posicion pero su altura si es variable entre niveles.
 
-[continuar con el funcionamiento de las tiles y la colision del mapa]
++0x0A/+0x0B = X de la escalera
++0x0C = límite vertical de la escalera
++0x0D = segundo valor vertical de la escalera
 
+En una de las rutinas aparece:
+```
+LD A,(IX+$0D)
+ADD A,$10
+CP (IY+$0D)
+JR Z,$B103
+JR C,$B118
+CP (IY+$0C)
+JR NC,$B118
+```
+Indica que la referencia al jugador es:
+Y jugador + 0x10
+mientras rango de la escalera es mediante:
+Puntero Escalera +0C
+Puntero Escalera +0D
+
+Otra rutina usa:
+```
+LD A,(IX+$0D)
+DEC A
+CP (IY+$0C)
+JR NC,$B0AC
+INC A
+CP (IY+$0D)
+JR C,$B0AC
+```
+Esto hace que la colision/trigger vertical de la escalera es variable y depende de su extesion vertical que va acorde a su dibujo grafico.
+Este es el rango que se compara con X/Y del jugador para definir si el jugador esta cerca para escalar.
+
+##Interaccion item con el entorno
+Los items se manejan desde otra tabla que apunta a F900.
+La interaccion ocurre en la rutina B870
+
+```
+B887  LD A,(IX+$0D)
+B88A  ADD A,$11
+B88C  SUB (IY+$0D)
+B88F  CP $23
+B891  RET NC
+```
+El item hace una comprobacion vertical o horizontal con X/Y del jugador, una vez mas es un hitbox que se compara con el punto central del jugador.
+
+La interaccion con el terrno es diferente.
+```
+B0A0  LD L,(IX+$0C)
+B0A3  LD H,(IX+$0D)
+B0A6  LD DE,$0140
+B0A9  ADD HL,DE
+B0AA  LD (IX+$0C),L
+B0AD  LD (IX+$0D),H
+B0B0  CALL $B367
+```
+Un item tiene una colision vertical de 16px y solo de 1px de ancho, segun observaciones graficas. Esto hace una colision perfectamente vertical, pero en cuanto horizontalmente, solo tocara una superficie si del lado de la superficie al menos toca la mitad, es decir si la linea central toca una parte de la superficie.
+
+##Colision de los terrenos
+Para encontrar el mapa de las colisiones del terreno, se uso un metodo de analisis de volcado de RAM, en esta situacion ell intenso analisis de la IA para encontrar patrones fue de mucha utilidad.
+
+La representación que resultó útil fue una rejilla de:
+64 columnas x 32 filas
+con celdas de 8 x 8 píxeles
+
+Esto produce:
+64 x 32 = 2048 celdas
+
+La misma coordenada (row,col) puede ser usada para consultar dos
+estructuras relacionadas.
+
+A) ATTRIBUTE RAM
+Base: 0xC800
+Rango: 0xC800 - 0xCFFF
+Tamaño: 0x800 bytes
+Organización: 64 x 32, un byte por celda
+
+B) VIDEO / TILE RAM
+Base: 0xD000
+Rango: 0xD000 - 0xDFFF
+Tamaño: 0x1000 bytes
+Organización: 64 x 32 tiles, dos bytes por tile
+
+La visualización del mapa utiliza:
+ORIGIN_X = -64
+ORIGIN_Y = -8
+CELL     = 8
+
+*Por alguna razon toda coordenada X/Y de cualquier elemento se le debe restar -64/-8 respectivamente para que su dibujo coincida con las coordenadas en pantalla. Se desconoce porque es asi.*
+
+Se encontro que la mejor forma de dibujar las colisiones de plataformas y paredes, asi como de plataformas destruibles era:
+0x1F = Limite del escenario colisionable
+0x0D = Estructura fija / Colisionables
+0x20 = Espacio vacío / No dibujar
+
+Aunque funciona muy bien, este metodo no permite dibujar estructuras destruibles invisibles y escondidas, sus valores no se diferencian en el mapa de tiles del nivel. Y su existencia parece mas bien estar representado como un objeto en la tabla de objetos en 0xE080, aunque aun no se conoce bien este detalle.
+
+*Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transicion al pasar a otro nivel o estar en una escena de creditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situacion del juego estas.*
+
+#Futuras investigaciones y mejoras
+Este proyecto aun no completa muchas caracteristicas que podriasn ser de provecho para un script de hitbox, por ejemplo:
+- Completar mapa de hitbox del nivel, identificar estructuras destruibles ocultas.
+- Los animales como los cocodrile o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
+- Identificar que item esta dentro de un destruible, si acaso se puede identificar.
+- Reconocer cuando se esta dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no se esta dentro de un nivel.
+
+**Hasta entonces el proyecto esta abierto para cualquier colaboracion.**
 
