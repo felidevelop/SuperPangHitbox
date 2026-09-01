@@ -23,6 +23,8 @@ Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de
 
 Para la ejecución en FBA-RR solo es necesario abrir el ejecutable .exe abrir la ROM y abrir las opciones para la ejecución del .lua desarrollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma que es mas fácil buscarlo en la depuración del mame.
 
+Para ejecutar el lua es necesario descargar en emulador FBA-RR v0.0.5 o posterior. Tener a mano su copia de la ROM de Super Pang. Abrir el emulador y cargar la ROM. Ir a Game > Lua Scripting > New Lua Script Window > Browse y cargar el lua del proyecto. Y presionar en Run.
+
 # Valores
 Para la búsqueda de valores, fue de gran ayuda el uso de IA adjuntando archivos, dump de la RAM y fotos que mostraban detalles exactos para el trabajo de análisis y búsqueda de los posibles valores.
 
