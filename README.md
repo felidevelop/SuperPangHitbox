@@ -1,8 +1,6 @@
 # Super Pang Hitbox
 Proyecto enfocado en la búsqueda del sistema de colisiones del juego Super Pang Arcade 1990
 
-[falta colocar imagenes ilustrativas]
-
 Este proyecto se ha desarrollado bajo el propósito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchell Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colisión de los diferentes elementos del juego. A continuación se dará un detalle técnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso que aun esta puliendo detalles.
 
 <img width="768" height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
