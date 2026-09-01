@@ -1,7 +1,7 @@
 # Super Pang Hitbox
 Proyecto enfocado en la busqueda del sistema de colisiones del juego Super Pang Arcade 1990
 
-Este proyecto se ha desarrollado bajo el proposito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchel Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colision de los diferentes elementos del juego. A continuacion se dara un detalle tecnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso qu aun esta puliendo detalles.
+Este proyecto se ha desarrollado bajo el proposito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchell Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colision de los diferentes elementos del juego. A continuacion se dara un detalle tecnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso que aun esta puliendo detalles.
 
 <img width="768" height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
 
@@ -17,10 +17,9 @@ mame spang -window -debug
 
 Para ejecutar la rom en mame en modo ventana y con la depuracion activa. Es necesario contar con la ROM y el archivo de sonidos de la placa del juego ym2413.
 
-Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de observacion (watpoint) para detener la ejecucion en un punto especifico del codigo o cuando un valor de la RAM esta siendo consultada o modificado.
+Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de observacion (watchpoint) para detener la ejecucion en un punto especifico del codigo o cuando un valor de la RAM esta siendo consultado o modificado.
 
-Para la ejecucion en FBA-RR solo es necesario abrir el ejecutable .exe abrir la rom y abrir las opciones para la ejecucion del .lua desarollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma mas facil que buscarlo en la depuracion de mame.
-
+Para la ejecucion en FBA-RR solo es necesario abrir el ejecutable .exe abrir la rom y abrir las opciones para la ejecucion del .lua desarrollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma que es mas facil buscarlo en la depuracion del mame.
 
 # Valores
 Para la busqueda de valores, fue de gran ayuda el uso de IA adjuntando archivos, dump de la RAM y fotos que mostraban detalles exactos para el trabajo de analisis y busqueda de los posibles valores.
