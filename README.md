@@ -530,11 +530,11 @@ Aunque funciona muy bien, este metodo no permite dibujar estructuras destruibles
 *Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transicion al pasar a otro nivel o estar en una escena de creditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situacion del juego estas.*
 
 # Futuras investigaciones y mejoras
-Este proyecto aun no completa muchas caracteristicas que podriasn ser de provecho para un script de hitbox, por ejemplo:
+Este proyecto aun no completa muchas caracteristicas que podrian ser de provecho para un script de hitbox, por ejemplo:
 - Completar mapa de hitbox del nivel, identificar estructuras destruibles ocultas.
-- Los animales como los cocodrile o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
+- Los animales como los cocodrile, o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
 - Identificar que item esta dentro de un destruible, si acaso se puede identificar.
-- Reconocer cuando se esta dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no se esta dentro de un nivel.
+- Reconocer cuando estamos dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no estamos dentro de un nivel.
 
 **Hasta entonces el proyecto esta abierto para cualquier colaboracion.**
 
