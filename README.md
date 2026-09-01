@@ -32,7 +32,7 @@ objeto[i] = 0xE080 + i * 0x20
 ```
 Buscando 128 elementos, aunque esto solo es una aproximacion.
 
-##Estructuras de los objetos
+## Estructuras de los objetos
 La clasificacion de los objetos se distribuye asi:
 | Offset | Descripcion |
 | :--- | :--- |
@@ -48,7 +48,7 @@ Primero hay que mencionar que todos los detalles del funcionamiento de las rutin
 
 Cada interaccion parece tener su propio apartado para elegir como interacturar entre si, es decir la colision entre Globo y Arpon, Globo y Jugador, Jugador e item, son independientes a excepcion de algunos casos que comparten el mismo procedimiento.
 
-###Por ejemplo interaccion entre globo y arpon:
+### Por ejemplo interaccion entre globo y arpon:
 El objeto atacado proporciona su perfil geométrico.
 El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
 Este comportamiento tambien aplica para los globos hexagonales.
@@ -319,7 +319,7 @@ Las rutinas demostraban que los elementos solo se comparaban con la posicion X d
 
 El valor +0xE aparece cuando el arpon recien es creado al disparar, y nace con la posicion Y con la que fue creado y no cambia durante el trayecto, es decir una referencia Y de su creacion. Este valor es el usado para lo colision vertical del arpon. Tiene todo el sentido porque el arpon ataca incluso a globos desde su base.
 
-##Interaccion globo con jugador
+## Interaccion globo con jugador
 Para la interaccion entre globo y jugador es diferente en cuanto a globo y arpon. La rutina responsable de esto se encuentra en BBE6.
 
 ```
@@ -427,7 +427,7 @@ BC0E  JP NC,$BC90
 
 Para la colision con el jugador se observo que la hitbox del globo no se compara con una hitbox del jugador, mas bien solo se usa la posicion X e Y del jugador para la comparacion. Es decir, la hitbox del globo tiene que alcanzar el punto central del jugador para que se accione una colision.
 
-##Interaccion escalera con jugador
+## Interaccion escalera con jugador
 Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, una escalera siempre tiene su posicion X e Y fijas, son elementos que no cambian de posicion pero su altura si es variable entre niveles.
 
 +0x0A/+0x0B = X de la escalera
@@ -463,7 +463,7 @@ JR C,$B0AC
 Esto hace que la colision/trigger vertical de la escalera es variable y depende de su extesion vertical que va acorde a su dibujo grafico.
 Este es el rango que se compara con X/Y del jugador para definir si el jugador esta cerca para escalar.
 
-##Interaccion item con el entorno
+## Interaccion item con el entorno
 Los items se manejan desde otra tabla que apunta a F900.
 La interaccion ocurre en la rutina B870
 
@@ -488,7 +488,7 @@ B0B0  CALL $B367
 ```
 Un item tiene una colision vertical de 16px y solo de 1px de ancho, segun observaciones graficas. Esto hace una colision perfectamente vertical, pero en cuanto horizontalmente, solo tocara una superficie si del lado de la superficie al menos toca la mitad, es decir si la linea central toca una parte de la superficie.
 
-##Colision de los terrenos
+## Colision de los terrenos
 Para encontrar el mapa de las colisiones del terreno, se uso un metodo de analisis de volcado de RAM, en esta situacion ell intenso analisis de la IA para encontrar patrones fue de mucha utilidad.
 
 La representación que resultó útil fue una rejilla de:
@@ -529,7 +529,7 @@ Aunque funciona muy bien, este metodo no permite dibujar estructuras destruibles
 
 *Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transicion al pasar a otro nivel o estar en una escena de creditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situacion del juego estas.*
 
-#Futuras investigaciones y mejoras
+# Futuras investigaciones y mejoras
 Este proyecto aun no completa muchas caracteristicas que podriasn ser de provecho para un script de hitbox, por ejemplo:
 - Completar mapa de hitbox del nivel, identificar estructuras destruibles ocultas.
 - Los animales como los cocodrile o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
