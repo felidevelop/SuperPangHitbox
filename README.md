@@ -1,13 +1,15 @@
 # Super Pang Hitbox
-Proyecto enfocado en la busqueda del sistema de colisiones del juego Super Pang Arcade 1990
+Proyecto enfocado en la búsqueda del sistema de colisiones del juego Super Pang Arcade 1990
 
-Este proyecto se ha desarrollado bajo el proposito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchell Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colision de los diferentes elementos del juego. A continuacion se dara un detalle tecnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso que aun esta puliendo detalles.
+[falta colocar imagenes ilustrativas]
+
+Este proyecto se ha desarrollado bajo el propósito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchell Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colisión de los diferentes elementos del juego. A continuación se dará un detalle técnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso que aun esta puliendo detalles.
 
 <img width="768" height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
 
-Para explorar el funcionamiento del juego se ha usado las herramientas MAME para la depuracion y examinar el codigo fuente, tambien se uso el emulador FBA-RR v0.0.5 para la busqueda de las RAM Values del juego y el uso de script lua para una mejor exploracion y comprobacion de los valores encontrados.
+Para explorar el funcionamiento del juego se ha usado las herramientas MAME para la depuracion y examinar el codigo fuente, tambien se uso el emulador FBA-RR v0.0.5 para la búsqueda de las RAM Values del juego y el uso de script lua para una mejor exploración y comprobación de los valores encontrados.
 
-*El codigo fuente lua actual es posible cargarlo, usarlo y disfrutarlo. Pero debe recordar que aun esta imcompleto.*
+*El código fuente lua actual es posible cargarlo, usarlo y disfrutarlo. Pero debe recordar que aun esta imcompleto.*
 
 Para el uso de mame se ejecuta en cmd:
 
@@ -15,44 +17,44 @@ Para el uso de mame se ejecuta en cmd:
 mame spang -window -debug
 ```
 
-Para ejecutar la rom en mame en modo ventana y con la depuracion activa. Es necesario contar con la ROM y el archivo de sonidos de la placa del juego ym2413.
+Para ejecutar la rom en mame en modo ventana y con la depuración activa. Es necesario contar con la ROM y el archivo de sonidos de la placa del juego ym2413.
 
-Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de observacion (watchpoint) para detener la ejecucion en un punto especifico del codigo o cuando un valor de la RAM esta siendo consultado o modificado.
+Esto ejecuta el juego y permite crear puntos de quiebre (breakpoint) y puntos de observación (watchpoint) para detener la ejecución en un punto especifico del codigo o cuando un valor de la RAM esta siendo consultado o modificado.
 
-Para la ejecucion en FBA-RR solo es necesario abrir el ejecutable .exe abrir la rom y abrir las opciones para la ejecucion del .lua desarrollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma que es mas facil buscarlo en la depuracion del mame.
+Para la ejecución en FBA-RR solo es necesario abrir el ejecutable .exe abrir la ROM y abrir las opciones para la ejecución del .lua desarrollado. Un lua fue usado para explorar los diferentes elementos y mostrar sus valores en pantalla de forma que es mas fácil buscarlo en la depuración del mame.
 
 # Valores
-Para la busqueda de valores, fue de gran ayuda el uso de IA adjuntando archivos, dump de la RAM y fotos que mostraban detalles exactos para el trabajo de analisis y busqueda de los posibles valores.
+Para la búsqueda de valores, fue de gran ayuda el uso de IA adjuntando archivos, dump de la RAM y fotos que mostraban detalles exactos para el trabajo de análisis y búsqueda de los posibles valores.
 
-En esta busqueda se encontro que la tabla puntero de los objetos comenzaba en la direccion E080 de la RAM, y cada bloque de objeto se organizaba cada 0x20 (32 en base10). Aunque busquedas posteriores sugieren que no todos los objetos tienen el mismo tamaño, algunos posiblemente 0x10 (16 en base10). Principalmente los objetos se recorrer con la formula.
+En esta búsqueda se encontró que la tabla puntero de los objetos comenzaba en la dirección E080 de la RAM, y cada bloque de objeto se organizaba cada 0x20 (32 decimal). Aunque búsquedas posteriores sugieren que no todos los objetos tienen el mismo tamaño, algunos posiblemente 0x10 (16 en base10). Principalmente los objetos se recorrer con la formula.
 
 ```
 objeto[i] = 0xE080 + i * 0x20
 ```
-Buscando 128 elementos, aunque esto solo es una aproximacion.
+Buscando 128 elementos, aunque esto solo es una aproximación.
 
 ## Estructuras de los objetos
-La clasificacion de los objetos se distribuye asi:
-| Offset | Descripcion |
+La clasificación de los objetos se distribuye así:
+| Offset | Descripción |
 | :--- | :--- |
 | +0x00 | 1=activo/0=inactivo |
-| +0x09/0x0A/0x0B | Posicion X |
-| +0x0D | Posicion Y |
+| +0x09/0x0A/0x0B | Posición X |
+| +0x0D | Posición Y |
 | +0x16 | Numero usado para diferenciar el tamaño del globo 1/2/4/8/16 |
-| +0x1B | Posicion X utilizada por las rutinas de colisión |
+| +0x1B | Posición X utilizada por las rutinas de colisión |
 | +0x1C | Selector de perfil utilizado por el dispatcher de las rutinas 8Axx |
 
-##Funcionamiento de rutinas/funciones
-Primero hay que mencionar que todos los detalles del funcionamiento de las rutinas que determinan la colision fueron rastreadas usando el debug del codigo fuente del juego con MAME. Durante el rastreo se pudo concluir una serie de cosas.
+## Funcionamiento de rutinas/funciones
+Primero hay que mencionar que todos los detalles del funcionamiento de las rutinas que determinan la colisión fueron rastreadas usando el debug del código fuente del juego con MAME. Durante el rastreo se pudo concluir una serie de cosas.
 
-Cada interaccion parece tener su propio apartado para elegir como interacturar entre si, es decir la colision entre Globo y Arpon, Globo y Jugador, Jugador e item, son independientes a excepcion de algunos casos que comparten el mismo procedimiento.
+Cada interacción parece tener su propio apartado para elegir como interactúan entre si, es decir la colisión entre Globo y Arpón, Globo y Jugador, Jugador e Item, son independientes a excepción de algunos casos que comparten el mismo procedimiento.
 
-### Por ejemplo interaccion entre globo y arpon:
+### Por ejemplo interacción entre globo y arpon:
 El objeto atacado proporciona su perfil geométrico.
 El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
-Este comportamiento tambien aplica para los globos hexagonales.
+Este comportamiento también aplica para los globos hexagonales.
 
-Segun el perfil del globo o 0x1C
+Según el perfil del globo o 0x1C
 Rutinas:
 8AAD -> perfil 1
 8A98 -> perfil 2
@@ -60,14 +62,14 @@ Rutinas:
 8A5C -> perfil 4
 8A3E -> perfil 5
 
-Para los casos 3/4/5 la colision usa una tabla que se encuentra en la RAM para crear una colision mas compleja orientada a formar un circulo.
+Para los casos 3/4/5 la colisión usa una tabla que se encuentra en la RAM para crear una colisión mas compleja orientada a formar un circulo.
 RAM 912F → perfil 3 / 17 columnas
 RAM 90FB → perfil 4 / 25 columnas
 RAM 90B7 → perfil 5 / 33 columnas
 
 Cada entrada de esas tablas tiene dos valores verticales que, combinados con cada desplazamiento X, reconstruyen la forma de la hitbox del globo.
 
-Una conclusion importante aqui es que no son los valores RAM las que controlan los limites de colision, es el propio codigo fuente del juego, es decir que las hitbox no pueden ser controladas durante el juego. Y esto ocurre para todas las interacciones.
+Una conclusión importante aquí es que no son los valores RAM las que controlan los limites de colisión, es el propio código fuente del juego, es decir que las hitbox no pueden ser controladas durante el juego. Y esto ocurre para todas las interacciones.
 
 Durante el rastreo de los valores de los perfiles 3/4/5 se encontraron estos valores:
 
@@ -164,10 +166,9 @@ Base: 0x90B7
 | 31 | 0A | 14 |
 | 32 | 04 | 08 |
 
-Estos valores fueron extraidos mientras el debug del emulador MAME entraba en las rutinas de los perfiles. Porque si uno rastrea esas direcciones en la RAM values de FBA-RR no encontrara esos valores. Eso es porque los valores unicamente existen cuando la ejecucion entra a esas rutinas. Es decir hay valores RAM que solo existen por un momento antes de desaparecer, y el avance de frame a frame es muy rapido para detectarlos.
+Estos valores fueron extraídos mientras el debug del emulador MAME entraba en las rutinas de los perfiles. Porque si uno rastrea esas direcciones en la RAM values de FBA-RR no encontrara esos valores. Eso es porque los valores únicamente existen cuando la ejecución entra a esas rutinas. Es decir hay valores RAM que solo existen por un momento antes de desaparecer, y el avance de frame a frame es muy rápido para detectarlos.
 
-
-La rutina encontrada en 0x8A2A utiliza el valor de +0x1C para seleccionar que rutina determina los limites de colision.
+La rutina encontrada en 0x8A2A utiliza el valor de +0x1C para seleccionar que rutina determina los limites de colisión.
 
 ```
 8A2A  CP $01
@@ -308,18 +309,18 @@ PERFIL 5 — RUTINA 8A3E
 8A56  JP $8FE9
 ```
 
-El arpon se identifico como E380 dentro de la memoria RAM y siempre tiene este valor de puntero en cualquier nivel, lo que sugiere que los elementos pueden entar organizados en bloques especificos de la tabla de objetos.
+El arpón se identifico como E380 dentro de la memoria RAM y siempre tiene este valor de puntero en cualquier nivel, lo que sugiere que los elementos pueden entrar organizados en bloques específicos de la tabla de objetos.
 
-+0D = Posicion Y actual del arpón
++0D = Posición Y actual del arpón
 +0E = Origen vertical del arpón
 +1B = X del arpón
 
-Las rutinas demostraban que los elementos solo se comparaban con la posicion X del arpon, algo que indica que el arpon solo tiene 1px de ancho en su colision, valor que fue comprobado al disparar el arpon muy cerca de paredes y comprobar que solo cuando la fina linea toca algo hay interaccion.
+Las rutinas demostraban que los elementos solo se comparaban con la posición X del arpón, algo que indica que el arpón solo tiene 1px de ancho en su colisión, valor que fue comprobado al disparar el arpón muy cerca de paredes y comprobar que solo cuando la fina línea toca algo hay interacción.
 
-El valor +0xE aparece cuando el arpon recien es creado al disparar, y nace con la posicion Y con la que fue creado y no cambia durante el trayecto, es decir una referencia Y de su creacion. Este valor es el usado para lo colision vertical del arpon. Tiene todo el sentido porque el arpon ataca incluso a globos desde su base.
+El valor +0xE aparece cuando el arpón recién es creado al disparar, y nace con la posición Y con la que fue creado y no cambia durante el trayecto, es decir una referencia Y de su creación. Este valor es el usado para lo colisión vertical del arpón. Tiene todo el sentido porque el arpón ataca incluso a globos desde su base.
 
-## Interaccion globo con jugador
-Para la interaccion entre globo y jugador es diferente en cuanto a globo y arpon. La rutina responsable de esto se encuentra en BBE6.
+## Interacción globo con jugador
+Para la interacción entre globo y jugador es diferente en cuanto a globo y arpón. La rutina responsable de esto se encuentra en BBE6.
 
 ```
 BBE6  CP $01
@@ -424,10 +425,12 @@ BC0C  CP $40
 BC0E  JP NC,$BC90
 ```
 
-Para la colision con el jugador se observo que la hitbox del globo no se compara con una hitbox del jugador, mas bien solo se usa la posicion X e Y del jugador para la comparacion. Es decir, la hitbox del globo tiene que alcanzar el punto central del jugador para que se accione una colision.
+Para la colisión con el jugador se observo que la hitbox del globo no se compara con una hitbox del jugador, mas bien solo se usa la posición X e Y del jugador para la comparación. Es decir, la hitbox del globo tiene que alcanzar el punto central del jugador para que se accione una colisión.
 
-## Interaccion escalera con jugador
-Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, una escalera siempre tiene su posicion X e Y fijas, son elementos que no cambian de posicion pero su altura si es variable entre niveles.
+*La hitbox del globo de perfil 1 tiene las mismas dimensiones que usa el hitbox del jugador para interactuar con el terreno*
+
+## Interacción escalera con jugador
+Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, una escalera siempre tiene su posición X e Y fijas, son elementos que no cambian de posición pero su altura si es variable entre niveles.
 
 +0x0A/+0x0B = X de la escalera
 +0x0C = límite vertical de la escalera
@@ -459,12 +462,12 @@ INC A
 CP (IY+$0D)
 JR C,$B0AC
 ```
-Esto hace que la colision/trigger vertical de la escalera es variable y depende de su extesion vertical que va acorde a su dibujo grafico.
+Esto hace que la colisión/trigger vertical de la escalera es variable y depende de su extensión vertical que va acorde a su dibujo grafico.
 Este es el rango que se compara con X/Y del jugador para definir si el jugador esta cerca para escalar.
 
-## Interaccion item con el entorno
+## Interacción item con el entorno
 Los items se manejan desde otra tabla que apunta a F900.
-La interaccion ocurre en la rutina B870
+La interacción ocurre en la rutina B870
 
 ```
 B887  LD A,(IX+$0D)
@@ -473,9 +476,9 @@ B88C  SUB (IY+$0D)
 B88F  CP $23
 B891  RET NC
 ```
-El item hace una comprobacion vertical o horizontal con X/Y del jugador, una vez mas es un hitbox que se compara con el punto central del jugador.
+El item hace una comprobación vertical y horizontal con X/Y del jugador, una vez mas es un hitbox que se compara con el punto central del jugador.
 
-La interaccion con el terrno es diferente.
+La interacción con el terreno es diferente.
 ```
 B0A0  LD L,(IX+$0C)
 B0A3  LD H,(IX+$0D)
@@ -485,10 +488,10 @@ B0AA  LD (IX+$0C),L
 B0AD  LD (IX+$0D),H
 B0B0  CALL $B367
 ```
-Un item tiene una colision vertical de 16px y solo de 1px de ancho, segun observaciones graficas. Esto hace una colision perfectamente vertical, pero en cuanto horizontalmente, solo tocara una superficie si del lado de la superficie al menos toca la mitad, es decir si la linea central toca una parte de la superficie.
+Un item tiene una colisión vertical de 16px y solo de 1px de ancho, según observaciones graficas. Esto hace una colisión perfectamente vertical, pero en cuanto horizontalmente, solo tocara una superficie si del lado de la superficie al menos toca la mitad, es decir si la línea central toca una parte de la superficie.
 
-## Colision de los terrenos
-Para encontrar el mapa de las colisiones del terreno, se uso un metodo de analisis de volcado de RAM, en esta situacion ell intenso analisis de la IA para encontrar patrones fue de mucha utilidad.
+## Colisión de los terrenos
+Para encontrar el mapa de las colisiones del terreno, se uso un método de análisis de volcado de RAM, en esta situación el intenso análisis de la IA para encontrar patrones fue de mucha utilidad.
 
 La representación que resultó útil fue una rejilla de:
 64 columnas x 32 filas
@@ -497,8 +500,7 @@ con celdas de 8 x 8 píxeles
 Esto produce:
 64 x 32 = 2048 celdas
 
-La misma coordenada (row,col) puede ser usada para consultar dos
-estructuras relacionadas.
+La misma coordenada (row,col) puede ser usada para consultar dos estructuras relacionadas.
 
 A) ATTRIBUTE RAM
 Base: 0xC800
@@ -517,23 +519,24 @@ ORIGIN_X = -64
 ORIGIN_Y = -8
 CELL     = 8
 
-*Por alguna razon toda coordenada X/Y de cualquier elemento se le debe restar -64/-8 respectivamente para que su dibujo coincida con las coordenadas en pantalla. Se desconoce porque es asi.*
+*Por alguna razón toda coordenada X/Y de cualquier elemento se le debe restar -64/-8 respectivamente para que su dibujo coincida con las coordenadas en pantalla. Se desconoce porque es asi.*
 
-Se encontro que la mejor forma de dibujar las colisiones de plataformas y paredes, asi como de plataformas destruibles era:
+Se encontró que la mejor forma de dibujar las colisiones de plataformas y paredes, así como de plataformas destruibles era:
 0x1F = Limite del escenario colisionable
 0x0D = Estructura fija / Colisionables
 0x20 = Espacio vacío / No dibujar
 
-Aunque funciona muy bien, este metodo no permite dibujar estructuras destruibles invisibles y escondidas, sus valores no se diferencian en el mapa de tiles del nivel. Y su existencia parece mas bien estar representado como un objeto en la tabla de objetos en 0xE080, aunque aun no se conoce bien este detalle.
+Aunque funciona muy bien, este método no permite dibujar estructuras destruibles invisibles y escondidas, sus valores no se diferencian en el mapa de tiles del nivel. Y su existencia parece mas bien estar representado como un objeto en la tabla de objetos en 0xE080, aunque aun no se conoce bien este detalle.
 
-*Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transicion al pasar a otro nivel o estar en una escena de creditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situacion del juego estas.*
+*Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transición al pasar a otro nivel o al estar en una escena de créditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situación del juego estas.*
 
 # Futuras investigaciones y mejoras
-Este proyecto aun no completa muchas caracteristicas que podrian ser de provecho para un script de hitbox, por ejemplo:
+Este proyecto aun no completa muchas características que podrían ser de provecho para un script de hitbox, por ejemplo:
 - Completar mapa de hitbox del nivel, identificar estructuras destruibles ocultas.
 - Los animales como los cocodrile, o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
 - Identificar que item esta dentro de un destruible, si acaso se puede identificar.
 - Reconocer cuando estamos dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no estamos dentro de un nivel.
+- La hitbox de los elementos busca tocar el punto central del jugador, pero el jugador tiene una hitbox para el terreno que es igual que la hitbox que tiene con el globo de perfil 1. Entonces es posible crear un lua corregido para que todos tengan una hitbox rectangular y no depender de un punto, aunque no sea tecnicamente correcto.
 
 **Hasta entonces el proyecto esta abierto para cualquier colaboracion.**
 
