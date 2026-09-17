@@ -534,6 +534,12 @@ Rango: 0xD000 - 0xDFFF
 Tamaño: 0x1000 bytes
 Organización: 64 x 32 tiles, dos bytes por tile
 
+C) PHYSICAL / COLLISION MAP
+Base: 0xF000
+Rango: 0xF000 - 0xF7FF
+Tamaño: 0x800 bytes
+Organización: 64 x 32, un byte por celda, con un stride de 0x40 bytes por fila.
+
 La visualización del mapa utiliza:
 ORIGIN_X = -64
 ORIGIN_Y = -8
@@ -541,18 +547,20 @@ CELL     = 8
 
 *Por alguna razón toda coordenada X/Y de cualquier elemento se le debe restar -64/-8 respectivamente para que su dibujo coincida con las coordenadas en pantalla. Se desconoce porque es asi.*
 
-Se encontró que la mejor forma de dibujar las colisiones de plataformas y paredes, así como de plataformas destruibles era:
-0x1F = Limite del escenario colisionable
-0x0D = Estructura fija / Colisionables
-0x20 = Espacio vacío / No dibujar
+La tercera estructura permite detectar de forma directa el espacio físico rígido del nivel, incluyendo plataformas, paredes, límites del escenario y estructuras sin elemento gráfico visible.
 
-Aunque funciona muy bien, este método no permite dibujar estructuras destruibles invisibles y escondidas, sus valores no se diferencian en el mapa de tiles del nivel. Y su existencia parece mas bien estar representado como un objeto en la tabla de objetos en 0xE080, aunque aun no se conoce bien este detalle.
+En las pruebas realizadas, los valores observados indican:
+
+Igual a 0x00 = espacio sin colisión
+Distinto de 0x00 = espacio con estructura física / colisionable
+*Aun no se identifica exactamente que son los demas valores, solo se sabe que 0 es no colisionable*
+
+Por lo tanto, esta tabla resulta especialmente útil para reconstruir visualmente la geometría física del nivel y detectar plataformas invisibles o estructuras que no pueden identificarse únicamente mediante la información gráfica de C800 y D000.
 
 *Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transición al pasar a otro nivel o al estar en una escena de créditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situación del juego estas.*
 
 # Futuras investigaciones y mejoras
 Este proyecto aun no completa muchas características que podrían ser de provecho para un script de hitbox, por ejemplo:
-- Completar mapa de hitbox del nivel, identificar estructuras destruibles ocultas.
 - Los animales como los cocodrile, o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
 - Identificar que item esta dentro de un destruible, si acaso se puede identificar.
 - Reconocer cuando estamos dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no estamos dentro de un nivel.
