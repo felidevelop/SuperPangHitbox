@@ -1,7 +1,12 @@
-17 Septiembre 2026 v 0.2
+## 17 Septiembre 2026
+### Cambiado
+v0.2
 - Inclusion de deteccion de plataformas invisibles dentro del nivel
+- Se dibuja los cuadros con un color semitransparente en lugar de solo los bordes
 
-30 Agosto 2026 v0.1
+## 30 Agosto 2026
+### Agregado
+v0.1
 - Publicacion de la primera version
 - Busqueda de elementos dentro del nivel
 - Deteccion del tipo de objeto y dibujar colisiones conocidas
