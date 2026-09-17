@@ -1,8 +1,10 @@
 --[[
-Proyecto Super Pang Hitbox v0.1
+Proyecto Super Pang Hitbox v0.2
 
 Esta primera version solo tiene proposito de muestra de funcionamiento.
 Aun hay caracteristicas que no estan pulidas para una version final, funcional o presentable.
+
+- v0.2 incluye el descubrimiento de las plataformas invisibles
 ]]
 
 
@@ -296,6 +298,7 @@ end
 
 local function drawLevelCollisionGrid()
     local BASE = 0xC800
+    local BASE2 = 0xF000
     local COLS = 64
     local ROWS = 32
     local CELL = 8
@@ -305,10 +308,16 @@ local function drawLevelCollisionGrid()
 
     for row = 0, ROWS - 1 do
         for col = 0, COLS - 1 do
+
+            if (row > 26) then
+                break
+            end
+
             local id = memory.readbyte(BASE + row * 0x40 + col)
+            local value = memory.readbyte(BASE2 + row * 0x40 + col)
 
             -- id detectados como colisionables
-            if id == 0x1F or id == 0x0D then
+            if id == 0x1F or id == 0x0D or value ~= 0 then
                 local x1 = ORIGIN_X + col * CELL
                 local y1 = ORIGIN_Y + row * CELL
                 local x2 = x1 + CELL
@@ -317,18 +326,14 @@ local function drawLevelCollisionGrid()
                 local color
 
                 if id == 0x1F then
-                    color = 0x00A0FF00
+                    color = 0x00A0FF80
                 elseif id == 0x0D then
-                    color = 0xFF000000
+                    color = 0xFF000080
+                elseif value ~= 0 then
+                    color = 0xFFFFFFAA
                 end
 
-                gui.box(
-                    x1,
-                    y1,
-                    x2,
-                    y2,
-                    color
-                )
+                gui.box(x1,y1,x2,y2,color,color)
             end
         end
     end
@@ -342,6 +347,8 @@ gui.register(function()
     local inending = memory.readbyte(0xe09d) == 1 
 
     if ingameplay == true and instage == true and inending == false then
+
+        --gui.box(0, 0, 500, 500, 0x000000FF)
 
         local pointer = 0xE080 -- Inicio puntero de deteccion de objetos
 
