@@ -565,6 +565,7 @@ Este proyecto aun no completa muchas características que podrían ser de provec
 - Identificar que item esta dentro de un destruible, si acaso se puede identificar.
 - Reconocer cuando estamos dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no estamos dentro de un nivel.
 - La hitbox de los elementos busca tocar el punto central del jugador, pero el jugador tiene una hitbox para el terreno que es igual que la hitbox que tiene con el globo de perfil 1. Entonces es posible crear un lua corregido para que todos tengan una hitbox rectangular y no depender de un punto, aunque no sea tecnicamente correcto.
+- Hacer funcionar el mecanismo en el Panic Mode, algunos valores no funcionan del todo bien en ese modo
 
 **Hasta entonces el proyecto esta abierto para cualquier colaboracion.**
 
