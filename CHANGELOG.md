@@ -1,7 +1,16 @@
+## 18 Noviembre 2026
+### Cambiado
+v0.3
+- Inclusion de deteccion de elementos ocultos dentro de bloques destruibles o invisibles
+- Prediccion de premios aleatorios al atacar un globo
+- Dibuja contador de premios garatizados
+- Prediccion de eventos faltantes para la aparicion de la estrella de la suerte
+- Botones incluidos debajo para la activacion/desactivacion de diferentes funciones
+
 ## 17 Septiembre 2026
 ### Cambiado
 v0.2
-- Inclusion de deteccion de plataformas invisibles dentro del nivel
+- Deteccion de plataformas invisibles dentro del nivel
 - Se dibuja los cuadros con un color semitransparente en lugar de solo los bordes
 
 ## 30 Agosto 2026
