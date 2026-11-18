@@ -3,7 +3,7 @@ Proyecto enfocado en la búsqueda del sistema de colisiones del juego Super Pang
 
 Este proyecto se ha desarrollado bajo el propósito de explorar el funcionamiento interno del juego Super Pang Arcade 1990 desarollado por Mitchell Corp. Especialmente descubrir los mecanismos de los hitbox o cuadros de colisión de los diferentes elementos del juego. A continuación se dará un detalle técnico con lenguaje natural para explicar su funcionamiento. RECUERDE: es un proyecto en progreso que aun esta puliendo detalles.
 
-<img width="768" height="480" alt="spang-08-30-225745" src="https://github.com/user-attachments/assets/14fed68d-fef2-41ce-a160-44d1e305288d" />
+<img width="768" height="480" alt="spang-11-18-110858" src="https://github.com/user-attachments/assets/03690254-33cb-496a-89a9-94d6a1672a8a" />
 
 Para explorar el funcionamiento del juego se ha usado las herramientas MAME para la depuracion y examinar el codigo fuente, tambien se uso el emulador FBA-RR v0.0.5 para la búsqueda de las RAM Values del juego y el uso de script lua para una mejor exploración y comprobación de los valores encontrados.
 
@@ -545,7 +545,9 @@ ORIGIN_X = -64\
 ORIGIN_Y = -8\
 CELL     = 8
 
-Saber esto es fundamental para saber interpretar la informacion de la geometria, se tiene que restar esos valores porque el escenario del juego en realidad es mas grande y en pantalla unicamente vemos desde la columna 8 y fila 2 del escenario completo.
+Saber esto es fundamental para saber interpretar la informacion de la geometria, se tiene que restar esos valores porque el escenario del juego en realidad es mas grande y en pantalla unicamente vemos a partir de la columna 9 y fila 2 del escenario completo.
+
+<img width="500" alt="Escenario y límites del nivel" src="https://github.com/user-attachments/assets/af856d73-416b-40a8-af12-003e36d35f71" />
 
 El sistema que determina los premios que contienen dentro cada estructura destruible esta definida por la PHYSICAL RAM, si su valor es 0 no es colisionale, pero si tienen un valor sus bits determinan ademas de ser colisionable algunas de sus propiedades, por ejemplo el premio que tienen adentro.\
 Para rastrearlos se necesita conocer 2 cosas:
@@ -581,6 +583,10 @@ Se puede reconocer esta tabla
 *Solo son necesario 3 bits para decifrar la recompenza. Los demas bits aun no se conoce que significan.*
 
 ## Tabla de recompensas
+
+<img width="500" alt="spang-11-18-111043" src="https://github.com/user-attachments/assets/6054c8a7-de7a-44bd-b482-d00ea226d902" />
+
+
 La tabla de recompensa se encuentra definido por cada nivel en la ROM, pero el script lua no puede leer la ROM directamente por lo que fue necesario trasladar esa tabla directamente.\
 El selector extraido del mapa fisico decide cual de estos codigos de objeto usar.
 
