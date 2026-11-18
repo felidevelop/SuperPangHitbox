@@ -611,7 +611,7 @@ Para la seleccion de la recompensa al atacar un globo mayor a tamaño 1, el jueg
 
 Muchos eventos actualizan este valor: como la carga o recarga de un nivel, atacar un globo, tomar un item, la aparicion de otros elementos, atacar al pez globo volador o el pez globo es golpeado por un globo (este evento en especial hace que este numero se recalcule muchas veces), y otros mas que no estan identificados.
 
-Este numero comienza con el valor de semilla 01C3 y cada evento actualiza su valor usando esta formula:
+Este numero comienza con el valor de semilla 01C3 (E146=C3, E147=01) y cada evento actualiza su valor usando esta formula:
 
 ```
 N = (E147 * 256) + E146
