@@ -54,12 +54,12 @@ El objeto atacado proporciona su perfil geométrico.
 El arpón se comporta como una línea de un píxel de ancho, desde la base donde fue disparado hasta su altura actual.
 Este comportamiento también aplica para los globos hexagonales.
 
-Según el perfil del globo o 0x1C
-Rutinas:
-8AAD -> perfil 1
-8A98 -> perfil 2
-8A7A -> perfil 3
-8A5C -> perfil 4
+Según el perfil del globo o 0x1C\
+Rutinas:\
+8AAD -> perfil 1\
+8A98 -> perfil 2\
+8A7A -> perfil 3\
+8A5C -> perfil 4\
 8A3E -> perfil 5
 
 <img width="123" height="141" alt="globo1" src="https://github.com/user-attachments/assets/4e7e75de-2ec3-48b0-977d-77065758a32f" />
@@ -69,9 +69,9 @@ Rutinas:
 <img width="244" height="220" alt="globo5" src="https://github.com/user-attachments/assets/5ad50a73-e62f-46d6-a1aa-ab15d3f9904c" />
 
 
-Para los casos 3/4/5 la colisión usa una tabla que se encuentra en la RAM para crear una colisión mas compleja orientada a formar un circulo.
-RAM 912F → perfil 3 / 17 columnas
-RAM 90FB → perfil 4 / 25 columnas
+Para los casos 3/4/5 la colisión usa una tabla que se encuentra en la RAM para crear una colisión mas compleja orientada a formar un circulo.\
+RAM 912F → perfil 3 / 17 columnas\
+RAM 90FB → perfil 4 / 25 columnas\
 RAM 90B7 → perfil 5 / 33 columnas
 
 Cada entrada de esas tablas tiene dos valores verticales que, combinados con cada desplazamiento X, reconstruyen la forma de la hitbox del globo.
@@ -80,8 +80,8 @@ Una conclusión importante aquí es que no son los valores RAM las que controlan
 
 Durante el rastreo de los valores de los perfiles 3/4/5 se encontraron estos valores:
 
-Perfil 3
-Base: 0x912F
+Perfil 3\
+Base: 0x912F\
 17 entradas / 34 bytes
 | dx | v1 | v2 |
 | :- | :- | :- |
@@ -103,8 +103,8 @@ Base: 0x912F
 | 15 | 07 | 0E |
 | 16 | 02 | 04 |
 
-Perfil 4
-Base: 0x90FB
+Perfil 4\
+Base: 0x90FB\
 25 entradas / 50 bytes
 | dx | v1 | v2 |
 | :- | :- | :- |
@@ -134,8 +134,8 @@ Base: 0x90FB
 | 23 | 0E | 1C |
 | 24 | 0C | 18 |
 
-Perfil 5
-Base: 0x90B7
+Perfil 5\
+Base: 0x90B7\
 33 entradas / 66 bytes
 | dx | v1 | v2 |
 | :- | :- | :- |
@@ -191,7 +191,7 @@ La rutina encontrada en 0x8A2A utiliza el valor de +0x1C para seleccionar que ru
 8A3B  JP Z,$8A5C
 ```
 
-El código continúa directamente en 8A3E para el siguiente perfil:
+El código continúa directamente en 8A3E para el siguiente perfil:\
 +1C = 5 -> rutina en 8A3E
 
 PERFIL 1 — RUTINA 8AAD
@@ -321,8 +321,8 @@ El arpón se identifico como E380 dentro de la memoria RAM y siempre tiene este 
 <img width="459" height="297" alt="arpon" src="https://github.com/user-attachments/assets/d49ef5bd-5542-475c-96f0-e4885818ca11" />
 
 
-+0D = Posición Y actual del arpón
-+0E = Origen vertical del arpón
++0D = Posición Y actual del arpón\
++0E = Origen vertical del arpón\
 +1B = X del arpón
 
 Las rutinas demostraban que los elementos solo se comparaban con la posición X del arpón, algo que indica que el arpón solo tiene 1px de ancho en su colisión, valor que fue comprobado al disparar el arpón muy cerca de paredes y comprobar que solo cuando la fina línea toca algo hay interacción.
@@ -448,8 +448,8 @@ Una escalera se identifica siempre desde E800 sin importar cual sea el nivel, un
 <img width="194" height="170" alt="escaleras" src="https://github.com/user-attachments/assets/821ecf1a-1bd6-4181-81f5-adc4092fe972" />
 
 
-+0x0A/+0x0B = X de la escalera
-+0x0C = límite vertical de la escalera
++0x0A/+0x0B = X de la escalera\
++0x0C = límite vertical de la escalera\
 +0x0D = segundo valor vertical de la escalera
 
 En una de las rutinas aparece:
@@ -462,10 +462,10 @@ JR C,$B118
 CP (IY+$0C)
 JR NC,$B118
 ```
-Indica que la referencia al jugador es:
-Y jugador + 0x10
-mientras rango de la escalera es mediante:
-Puntero Escalera +0C
+Indica que la referencia al jugador es:\
+Y jugador + 0x10\
+mientras rango de la escalera es mediante:\
+Puntero Escalera +0C\
 Puntero Escalera +0D
 
 Otra rutina usa:
@@ -482,7 +482,7 @@ Esto hace que la colisión/trigger vertical de la escalera es variable y depende
 Este es el rango que se compara con X/Y del jugador para definir si el jugador esta cerca para escalar.
 
 ## Interacción item con el entorno
-Los items se manejan desde otra tabla que apunta a F900.
+Los items se manejan desde otra tabla que apunta a F900.\
 La interacción ocurre en la rutina B870
 
 <img width="142" height="174" alt="item2" src="https://github.com/user-attachments/assets/84fe5569-7c5f-4066-b581-178a8d93545e" />
@@ -513,59 +513,135 @@ Un item tiene una colisión vertical de 16px y solo de 1px de ancho, según obse
 ## Colisión de los terrenos
 Para encontrar el mapa de las colisiones del terreno, se uso un método de análisis de volcado de RAM, en esta situación el intenso análisis de la IA para encontrar patrones fue de mucha utilidad.
 
-La representación que resultó útil fue una rejilla de:
-64 columnas x 32 filas
+La representación que resultó útil fue una rejilla de:\
+64 columnas x 32 filas\
 con celdas de 8 x 8 píxeles
 
-Esto produce:
+Esto produce:\
 64 x 32 = 2048 celdas
 
 La misma coordenada (row,col) puede ser usada para consultar dos estructuras relacionadas.
 
-A) ATTRIBUTE RAM
-Base: 0xC800
-Rango: 0xC800 - 0xCFFF
-Tamaño: 0x800 bytes
+A) ATTRIBUTE RAM\
+Base: 0xC800\
+Rango: 0xC800 - 0xCFFF\
+Tamaño: 0x800 bytes\
 Organización: 64 x 32, un byte por celda
 
-B) VIDEO / TILE RAM
-Base: 0xD000
-Rango: 0xD000 - 0xDFFF
-Tamaño: 0x1000 bytes
+B) VIDEO / TILE RAM\
+Base: 0xD000\
+Rango: 0xD000 - 0xDFFF\
+Tamaño: 0x1000 bytes\
 Organización: 64 x 32 tiles, dos bytes por tile
 
-C) PHYSICAL / COLLISION MAP
-Base: 0xF000
-Rango: 0xF000 - 0xF7FF
-Tamaño: 0x800 bytes
+C) PHYSICAL / COLLISION MAP\
+Base: 0xF000\
+Rango: 0xF000 - 0xF7FF\
+Tamaño: 0x800 bytes\
 Organización: 64 x 32, un byte por celda, con un stride de 0x40 bytes por fila.
 
-La visualización del mapa utiliza:
-ORIGIN_X = -64
-ORIGIN_Y = -8
+La visualización del mapa utiliza:\
+ORIGIN_X = -64\
+ORIGIN_Y = -8\
 CELL     = 8
 
-*Por alguna razón toda coordenada X/Y de cualquier elemento se le debe restar -64/-8 respectivamente para que su dibujo coincida con las coordenadas en pantalla. Se desconoce porque es asi.*
+Saber esto es fundamental para saber interpretar la informacion de la geometria, se tiene que restar esos valores porque el escenario del juego en realidad es mas grande y en pantalla unicamente vemos desde la columna 8 y fila 2 del escenario completo.
 
-La tercera estructura permite detectar de forma directa el espacio físico rígido del nivel, incluyendo plataformas, paredes, límites del escenario y estructuras sin elemento gráfico visible.
+El sistema que determina los premios que contienen dentro cada estructura destruible esta definida por la PHYSICAL RAM, si su valor es 0 no es colisionale, pero si tienen un valor sus bits determinan ademas de ser colisionable algunas de sus propiedades, por ejemplo el premio que tienen adentro.\
+Para rastrearlos se necesita conocer 2 cosas:
 
-En las pruebas realizadas, los valores observados indican:
+1 - Los 3 byte de la PHYSICAL RAM que identifican un selector de recompensa.\
+2 - Una tabla de 6 entradas almacenadas en la ROM por cada nivel.
 
-Igual a 0x00 = espacio sin colisión
-Distinto de 0x00 = espacio con estructura física / colisionable
-*Aun no se identifica exactamente que son los demas valores, solo se sabe que 0 es no colisionable*
+Al extraer los bits 3, 4 y 5 de la PHISICAL RAM con la formula:
 
-Por lo tanto, esta tabla resulta especialmente útil para reconstruir visualmente la geometría física del nivel y detectar plataformas invisibles o estructuras que no pueden identificarse únicamente mediante la información gráfica de C800 y D000.
+```
+flag = valor & 0x38
+```
 
-*Cuidado, los valores de los objetos reconocibles en un nivel no se borran durante una transición al pasar a otro nivel o al estar en una escena de créditos finales, como gameover o pantalla de titulo. Para evitar eso es necesario tener un valor que determine bien en que situación del juego estas.*
+o su equivalente en lua:
+
+```
+flag = (math.floor(valor / 8) % 8) * 8
+```
+
+Se puede reconocer esta tabla
+
+| Codigo | Selector |
+| :- | :- |
+| 00 | Sin recompensa |
+| 08 | Ruta especial de codigo E890 (generalmente una fruta de bonus de puntaje) |
+| 10 | Selector 0 |
+| 18 | Selector 1 |
+| 20 | Selector 2 |
+| 28 | Selector 3 |
+| 30 | Selector 4 |
+| 38 | Selector 5 |
+
+*Solo son necesario 3 bits para decifrar la recompenza. Los demas bits aun no se conoce que significan.*
+
+## Tabla de recompensas
+La tabla de recompensa se encuentra definido por cada nivel en la ROM, pero el script lua no puede leer la ROM directamente por lo que fue necesario trasladar esa tabla directamente.\
+El selector extraido del mapa fisico decide cual de estos codigos de objeto usar.
+
+ID de objetos
+| ID | Objeto |
+| :- | :- |
+| 02 | Doble arpon |
+| 04 | Gancho |
+| 06 | Laser |
+| 08 | Reloj de arena |
+| 0A | Reloj |
+| 0C | Dinamita |
+| 0E | Vida extra |
+| 10 | Estrella de la suerte |
+| 12 | Barrera |
+| 14 | Barrera (sprite de caballo) *Aparece en el nivel 39 en un bloque invisible* |
+
+*El ID 10 de la Estrella de la Suerte nunca es usado en ninguna tabla de recompenzas*
+
+## Mecanismo de recompensa aleatorio
+Para la seleccion de la recompensa al atacar un globo mayor a tamaño 1, el juego utiliza el valor en RAM E146/E147 y es el principal responsable de eventos aleatorios. Aunque su comportamiento es seudoaleatorio.
+
+Muchos eventos actualizan este valor: como la carga o recarga de un nivel, atacar un globo, tomar un item, la aparicion de otros elementos, atacar al pez globo volador o el pez globo es golpeado por un globo (este evento en especial hace que este numero se recalcule muchas veces), y otros mas que no estan identificados.
+
+Este numero comienza con el valor de semilla 01C3 y cada evento actualiza su valor usando esta formula:
+
+```
+N = (E147 * 256) + E146
+T = (N * 3) mod 65536
+nuevo E147 = floor(T / 256)
+nuevo E146 = (E146 + nuevo E147) mod 256
+```
+*Si nuevo E146 = 0 -> posibilidad de aparecer la estrella*
+
+Cada nivel tiene una tabla de 32 valores posibles cargados con los posibles items que pueden soltar o con el valor 00 que representa: sin recompenza.
+
+| 00 | 02 | 00 | 02 | 00 | 00 |
+| :- | :- | :- | :- | :- | :- |
+| 00 | 04 | 00 | 00 | 00 | 00 |
+| 00 | 00 | 0C | 00 | 00 | 00 |
+| 00 | 00 | 00 | 00 | 06 | 06 |
+| 00 | 00 | 00 | 00 | 00 | 00 |
+
+*Es una tabla inventada, no representa ningun nivel*
+
+Esto significa que la probabilidad minima de un item es de 1/32 = 3.125% y que mientras mas casillas use un mismo objeto mas probabilidades tiene de aparecer.
+
+Despues se aplica la formula R = nuevoE146 % 32 es decir se comprime el valor seudoaleatorio a 32 valores posibles y se selecciona el objeto en aquella casilla. Al atacar un globo y recalcular el valor, la casilla seleccionada sera el item a soltar o ningun si tenia un valor de 0. La prediccion funciona calculando cual sera el siguiente valor seudoaleatorio. *Significa que la prediccion puede fallar de un frame a otro si se recalcula mas de una vez.*
+
+### La Estrella
+La aparicion de la estrella se calcula con un evento diferente. El juego tiene una lista de objeto garantizados, una lista de items que siempre apareceran cuando realices el ataque N segun el nivel, ademas de que todos los niveles garantizan con este mismo mecanismo que aparecera una fruta de bonus de puntaje, aunque estos solo aparecen 1 vez por nivel, sea por premio garantizado o porque estaban ocultos en un bloque.
+
+Se dijo que si el nuevo E146 despues de recalcular termina en 0 mientras un nivel se carga o recarga, el nivel establece el valor E0CD en 10, es el contador de la estrella. Cuando en ese momento afortunado realizas el decimo ataque sin tomar una dinamita (porque los globos pequeños no disminuyen ese contador) aparecera la estrella, ya no dependes del numero de la suerte en ese momento. En el momento en que la estrella aparece el valor en RAM E0CC se establece en 2 indicando que ya no estara disponible durante la partida, unicamente se libera si se abandona la partida y se inicia uno nuevo. Tambien la posibilidad de que la estrella aparezca, unicamente puede ocurrir hasta el nivel 35 (Ruinas Maya de Tarde), mas alla de esto el script del juego no permite que el contador de la estrella se establezca en 10.
+
+Hay que mencionar que para que el nuevo E146 termine en 0 hay 256 combinaciones posibles, significa 256/65536 = 0.39% de probabilidad de que la estrella de la suerte este disponible justo en el momento en que el nivel es cargado.
+
+El script lua desde el comienzo, calcula muchos numeros seudoaleatorios en el futuro para predecir cuantos eventos son necesarios para que un calculo resulte en la posibilidad de la estrella de la suerte.
 
 # Futuras investigaciones y mejoras
 Este proyecto aun no completa muchas características que podrían ser de provecho para un script de hitbox, por ejemplo:
 - Los animales como los cocodrile, o pajaros, o pez globo volador tambien se debe buscar su hitbox correspondiente.
-- Identificar que item esta dentro de un destruible, si acaso se puede identificar.
-- Reconocer cuando estamos dentro de un nivel, y desactiva el dibujo grafico de elementos cuando no estamos dentro de un nivel.
 - La hitbox de los elementos busca tocar el punto central del jugador, pero el jugador tiene una hitbox para el terreno que es igual que la hitbox que tiene con el globo de perfil 1. Entonces es posible crear un lua corregido para que todos tengan una hitbox rectangular y no depender de un punto, aunque no sea tecnicamente correcto.
 - Hacer funcionar el mecanismo en el Panic Mode, algunos valores no funcionan del todo bien en ese modo
-
-**Hasta entonces el proyecto esta abierto para cualquier colaboracion.**
 
